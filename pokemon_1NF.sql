@@ -19,3 +19,4 @@ CREATE table pokemon_abilities(pokedex_number, ability_id, foreign key(pokedex_n
 INSERT into pokemon_abilities (pokedex_number, ability_id) select pokedex_number, ability_id from pokemon, abilities where pokemon.abilities LIKE '%' || abilities.name || '%';
 
 ALTER table pokemon drop column abilities;
+drop table split_abilities;

@@ -1,0 +1,43 @@
+CREATE table against_type(attacking_type_id, defending_type_id, effectiveness NUMERIC, primary key (attacking_type_id, defending_type_id), foreign key(attacking_type_id) references types(type_id), foreign key(defending_type_id) references types(type_id));
+INSERT into against_type (attacking_type_id, defending_type_id, effectiveness) select t1.type_id, t2.type_id, 1.0 from types t1 cross join types t2;
+
+UPDATE against_type as at set effectiveness = cast(p.against_grass as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'grass');
+UPDATE against_type as at set effectiveness = cast(p.against_fire as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'fire');
+UPDATE against_type as at set effectiveness = cast(p.against_water as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'water');
+UPDATE against_type as at set effectiveness = cast(p.against_bug as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'bug');
+UPDATE against_type as at set effectiveness = cast(p.against_normal as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'normal');
+UPDATE against_type as at set effectiveness = cast(p.against_poison as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'poison');
+UPDATE against_type as at set effectiveness = cast(p.against_electric as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'electric');
+UPDATE against_type as at set effectiveness = cast(p.against_ground as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'ground');
+UPDATE against_type as at set effectiveness = cast(p.against_fairy as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'fairy');
+UPDATE against_type as at set effectiveness = cast(p.against_fight as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'fighting');
+UPDATE against_type as at set effectiveness = cast(p.against_psychic as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'psychic');
+UPDATE against_type as at set effectiveness = cast(p.against_rock as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'rock');
+UPDATE against_type as at set effectiveness = cast(p.against_ghost as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'ghost');
+UPDATE against_type as at set effectiveness = cast(p.against_ice as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'ice');
+UPDATE against_type as at set effectiveness = cast(p.against_dragon as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'dragon');
+UPDATE against_type as at set effectiveness = cast(p.against_dark as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'dark');
+UPDATE against_type as at set effectiveness = cast(p.against_steel as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'steel');
+UPDATE against_type as at set effectiveness = cast(p.against_flying as numeric) from pokemon as p where defending_type_id = (select type_id from types where name = p.type1) and p.type2 = '' and attacking_type_id = (select type_id from types where name = 'flying');
+
+alter table pokemon drop column against_grass;
+alter table pokemon drop column against_fire;
+alter table pokemon drop column against_water;
+alter table pokemon drop column against_bug;
+alter table pokemon drop column against_normal;
+alter table pokemon drop column against_poison;
+alter table pokemon drop column against_electric;
+alter table pokemon drop column against_ground;
+alter table pokemon drop column against_fairy;
+alter table pokemon drop column against_fight;
+alter table pokemon drop column against_psychic;
+alter table pokemon drop column against_rock;
+alter table pokemon drop column against_ghost;
+alter table pokemon drop column against_ice;
+alter table pokemon drop column against_dragon;
+alter table pokemon drop column against_dark;
+alter table pokemon drop column against_steel;
+alter table pokemon drop column against_flying;
+
+alter table pokemon drop column type1;
+alter table pokemon drop column type2;

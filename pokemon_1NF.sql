@@ -1,4 +1,4 @@
--- import pokemond data from csv to table
+-- import pokemon data from csv to table
 .mode csv
 .import pokemon.csv pokemon
 

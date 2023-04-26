@@ -1,6 +1,10 @@
+--create a table against_type which has a composite primary key of attacking_type_id and defending_type_id (both are also FKs to type_id in types) and the corresponding effectiveness of the types
+--insert all possible type combinations and sets effectiveness to a default of 1
 CREATE table against_type(attacking_type_id, defending_type_id, effectiveness NUMERIC, primary key (attacking_type_id, defending_type_id), foreign key(attacking_type_id) references types(type_id), foreign key(defending_type_id) references types(type_id));
 INSERT into against_type (attacking_type_id, defending_type_id, effectiveness) select t1.type_id, t2.type_id, 1.0 from types t1 cross join types t2;
 
+--updates the effectiveness value in against_type to reflect actual value from pokemon_types table
+--all subsequent update statements are for each type
 UPDATE against_type AS at
 SET effectiveness = CAST(p.against_grass AS NUMERIC)
 FROM pokemon_types AS p
@@ -199,6 +203,7 @@ AND (
     WHERE pokedex_number = p.pokedex_number
 ) = 1;
 
+--delete all against_x columns from the pokemon_types table
 alter table pokemon_types drop column against_grass;
 alter table pokemon_types drop column against_fire;
 alter table pokemon_types drop column against_water;

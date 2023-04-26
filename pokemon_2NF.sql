@@ -1,35 +1,39 @@
+--create an abilities table with an ability_id primary key and distinct individual pokemon abilities
 CREATE table abilities(ability_id INTEGER PRIMARY KEY, name);
 INSERT into abilities(name) select distinct ability from pokemon;
 
+--create a copy of pokemon table for later use (in mapping pokemon to their abilities)
 CREATE temp table pokemon_temp as select * from pokemon;
 
+--drop ability column from pokemon table
 ALTER table pokemon drop column ability;
 
+--recreate pokemon table to have pokedex_number as primary key (and only have unique pokemon entries) using temp table
 CREATE temp table temp as select distinct * from pokemon;
 drop table pokemon;
-
 CREATE table pokemon (pokedex_number, name, against_bug, against_dark, against_dragon, against_electric, against_fairy, against_fight, against_fire, against_flying, against_ghost, against_grass, against_ground, against_ice, against_normal, against_poison, against_psychic, against_rock, against_steel, against_water, attack, base_egg_steps, base_happiness, base_total, capture_rate, classification, defense, experience_growth, height_m, hp, percentage_male, sp_attack, sp_defense, speed, type1, type2, weight_kg, generation, is_legendary, PRIMARY KEY (pokedex_number));
-
 INSERT into pokemon select pokedex_number, name, against_bug, against_dark, against_dragon, against_electric, against_fairy, against_fight, against_fire, against_flying, against_ghost, against_grass, against_ground, against_ice, against_normal, against_poison, against_psychic, against_rock, against_steel, against_water, attack, base_egg_steps, base_happiness, base_total, capture_rate, classification, defense, experience_growth, height_m, hp, percentage_male, sp_attack, sp_defense, speed, type1, type2, weight_kg, generation, is_legendary from temp;
-
 drop table temp;
 
+--create a table pokemon_abilities with FK pokedex_number and FK ability_id to map pokemon to their abilities (using pokemon_temp table)
 CREATE table pokemon_abilities(pokedex_number, ability_id, foreign key(pokedex_number) references pokemon(pokedex_number), foreign key (ability_id) references abilities(ability_id));
-
 INSERT into pokemon_abilities (pokedex_number, ability_id) select pokedex_number, ability_id from pokemon_temp, abilities where pokemon_temp.ability LIKE '%' || abilities.name || '%';
-
 drop table pokemon_temp;
 
+--create a table types with a type_id primary key and distinct pokemon types
 CREATE table types(type_id INTEGER PRIMARY KEY, name);
 INSERT into types(name) select distinct type1 from pokemon;
 
+--create a table pokemon_types with FK pokedex_number and FK type_id to map pokemon to their type(s)
 CREATE table pokemon_types(pokedex_number, type_id, foreign key(pokedex_number) references pokemon(pokedex_number), foreign key(type_id) references types(type_id));
 INSERT into pokemon_types(pokedex_number, type_id) select pokedex_number, type_id from pokemon, types where pokemon.type1 LIKE '%' || types.name || '%'; 
 INSERT into pokemon_types(pokedex_number, type_id) select pokedex_number, type_id from pokemon, types where pokemon.type2 LIKE '%' || types.name || '%';
 
+--delete type1 and type2 columns from pokemon table
 alter table pokemon drop column type1;
 alter table pokemon drop column type2;
 
+--add all against_x columns to the pokemon_types table
 alter table pokemon_types add column against_grass;
 alter table pokemon_types add column against_fire;
 alter table pokemon_types add column against_water;
@@ -49,6 +53,7 @@ alter table pokemon_types add column against_dark;
 alter table pokemon_types add column against_steel;
 alter table pokemon_types add column against_flying;
 
+--transfer data to all against_x columns in pokemon_types from pokemon table
 update pokemon_types set against_grass = pokemon.against_grass from pokemon where pokemon_types.pokedex_number = pokemon.pokedex_number;
 update pokemon_types set against_fire = pokemon.against_fire from pokemon where pokemon_types.pokedex_number = pokemon.pokedex_number;
 update pokemon_types set against_water = pokemon.against_water from pokemon where pokemon_types.pokedex_number = pokemon.pokedex_number;
@@ -68,6 +73,7 @@ update pokemon_types set against_dark = pokemon.against_dark from pokemon where 
 update pokemon_types set against_steel = pokemon.against_steel from pokemon where pokemon_types.pokedex_number = pokemon.pokedex_number;
 update pokemon_types set against_flying = pokemon.against_flying from pokemon where pokemon_types.pokedex_number = pokemon.pokedex_number;
 
+--drop all against_x columns from pokemon table
 alter table pokemon drop column against_grass;
 alter table pokemon drop column against_fire;
 alter table pokemon drop column against_water;
